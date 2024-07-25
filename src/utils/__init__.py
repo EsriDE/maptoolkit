@@ -1,6 +1,11 @@
 import os
 import sys
 
+from PySide6.QtGui import QGuiApplication
+from PySide6.QtQml import QQmlApplicationEngine
+from PySide6.QtNetwork import QSslSocket
+from PySide6.QtCore import QCoreApplication
+
 
 def add_module_directories():
     """
@@ -30,3 +35,27 @@ def initialize_arcgis():
 
     from coremapping import initialize
     initialize(api_key)
+
+def create_quick_app(app_name: str, app_folder: str) -> tuple[QGuiApplication, QQmlApplicationEngine]:
+    """
+    Creates a Qt Quick based app using an app folder containing a UI component named Main.
+    :param app_name: The name of the app.
+    :param app_folder: The name of the folder containing the UI. 
+
+    Returns the application and the QML app engine as a tuple (app, engine)
+    Raises a ValueError if the QML engine was not able to load any UI components!
+    """
+    application = QGuiApplication(sys.argv)    
+    QCoreApplication.setApplicationName(app_name)
+
+    engine = QQmlApplicationEngine()
+    engine.rootContext().setContextProperty("supportsSsl", QSslSocket.supportsSsl())
+    engine.addImportPath(app_folder)
+    engine.loadFromModule("UI", "Main")
+    engine.quit.connect(QCoreApplication.quit)
+
+    items = engine.rootObjects()
+    if not items:
+        raise ValueError("The QML engine was not able to load any UI component!")
+
+    return (application, engine)
