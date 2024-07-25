@@ -34,7 +34,7 @@ ApplicationWindow {
         TabButton {
             text: qsTr("Next")
             onClicked: {
-                if (basemapIndex < basemapStyles.length) {
+                if (basemapIndex + 1 < basemapStyles.length) {
                     basemapIndex++;
                     var basemapStyle = basemapStyles[basemapIndex];                
                     mapViewComponent.setBasemapStyle(basemapStyle);
