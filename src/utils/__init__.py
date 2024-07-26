@@ -4,7 +4,7 @@ import sys
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtNetwork import QSslSocket
-from PySide6.QtCore import QCoreApplication
+from PySide6.QtCore import QCoreApplication, QObject
 
 
 def add_module_directories():
@@ -59,3 +59,16 @@ def create_quick_app(app_name: str, app_folder: str) -> tuple[QGuiApplication, Q
         raise ValueError("The QML engine was not able to load any UI component!")
 
     return (application, engine)
+
+def find_mapview_model(window):
+    """
+    Tries to identify the underlying MapViewModel using a root app window.
+
+    :param window: The root app window.
+    """
+    window_children = window.findChildren(QObject)
+    for window_child in window_children:
+        if "MapViewModel" == window_child.metaObject().className():
+            return window_child
+        
+    return None
