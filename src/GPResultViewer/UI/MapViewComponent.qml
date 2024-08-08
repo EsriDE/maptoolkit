@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import Esri.Mapping
+import Esri.Mapping.Slots
 
 Item {
 
@@ -15,6 +16,10 @@ Item {
     }
 
     property bool sketchingEnabled: false
+
+    Geoprocessing {
+        id: gpHandler
+    }
 
     // Create MapQuickView here, and create its Map etc. in C++ code
     MapView {
@@ -33,7 +38,7 @@ Item {
             var polygon = JSON.parse(geometry);
             if (polygon.hasOwnProperty("rings") && Array.isArray(polygon.rings) && 0 < polygon.rings.length) {
                 // Add the polygon geometry as graphic
-                var polygonJson = JSON.stringify([polygon]);
+                var geometriesJson = JSON.stringify([polygon]);
                 var renderer = {
                     "label": "",
                     "description": "",
@@ -51,7 +56,11 @@ Item {
                     }
                 };
                 var rendererJson = JSON.stringify(renderer);
-                model.addGeometries(polygonJson, rendererJson);
+                model.addGeometries(geometriesJson, rendererJson);
+
+                // Delegate to the Python-based slot
+                var polygonJson = JSON.stringify(polygon);
+                gpHandler.sketchCompleted(polygonJson);
             } 
 
             // Start the next sketch

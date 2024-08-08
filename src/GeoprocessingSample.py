@@ -14,6 +14,9 @@ if __name__ == "__main__":
     # Initializes the ArcGIS Core environment
     initialize_arcgis()
 
+    # Import the slots
+    import GeoprocessingSampleSlots
+
     # Create a quick app and engine
     app_folder = os.path.join(Path(__file__).parent, "GPResultViewer")
     application, engine = create_quick_app("Geoprocessing Sample", app_folder)
