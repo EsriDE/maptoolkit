@@ -30,7 +30,29 @@ Item {
         mapView: view
         basemapStyle: "OsmStandard"
         onSketchCompleted: (geometry) => {
-            console.log(geometry);
+            var polygon = JSON.parse(geometry);
+            if (polygon.hasOwnProperty("rings") && Array.isArray(polygon.rings) && 0 < polygon.rings.length) {
+                // Add the polygon geometry as graphic
+                var polygonJson = JSON.stringify([polygon]);
+                var renderer = {
+                    "label": "",
+                    "description": "",
+                    "type": "simple",
+                    "symbol": {
+                        "type": "esriSFS",
+                        "style": "esriSFSSolid",
+                        "color": [0, 128, 0, 128],
+                        "outline": {
+                            "type": "esriSLS",
+                            "style": "esriSLSSolid",
+                            "color": [110, 110, 110, 255],
+                            "width": 1
+                        }
+                    }
+                };
+                var rendererJson = JSON.stringify(renderer);
+                model.addGeometries(polygonJson, rendererJson);
+            } 
 
             // Start the next sketch
             if (sketchingEnabled) {
