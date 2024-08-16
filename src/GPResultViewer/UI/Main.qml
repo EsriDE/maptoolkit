@@ -41,6 +41,13 @@ ApplicationWindow {
                     mapViewComponent.startSketching();
                 }
             }
+
+            Button {
+                text: qsTr("Execute")
+                onClicked: {
+                    mapViewComponent.createBuffer();
+                }
+            }
         }
     }
 

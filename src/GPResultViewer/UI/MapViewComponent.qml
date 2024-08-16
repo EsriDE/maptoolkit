@@ -15,6 +15,10 @@ Item {
         model.stopSketching();
     }
 
+    function createBuffer() {
+        gpHandler.createBuffer(model);
+    }
+
     property bool sketchingEnabled: false
 
     Geoprocessing {
@@ -46,7 +50,7 @@ Item {
                     "symbol": {
                         "type": "esriSFS",
                         "style": "esriSFSSolid",
-                        "color": [0, 128, 0, 128],
+                        "color": [0, 128, 0, 78],
                         "outline": {
                             "type": "esriSLS",
                             "style": "esriSLSSolid",
