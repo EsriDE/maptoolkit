@@ -16,8 +16,9 @@ def add_module_directories():
     if not "maptoolkit_path" in os.environ:
         raise ValueError("'maptoolkit_path' is not defined in the current environment!")
     for native_dir in os.environ["maptoolkit_path"].split(";"):
-        os.add_dll_directory(native_dir)
-        sys.path.append(native_dir)
+        if native_dir and os.path.exists(native_dir):
+            os.add_dll_directory(native_dir)
+            sys.path.append(native_dir)
 
 def initialize_arcgis():
     """
